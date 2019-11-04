@@ -22,4 +22,10 @@ class TesteCaixaEletronico {
 		Assertions.assertEquals("Saldo insuficiente.", CaixaEletonico.sacar(c1, 30.00));
 	}
 
+	@Test
+	void testeDepositarOk() {
+		ContaCorrente c1 = new ContaCorrente(1, 5.00);
+		Assertions.assertEquals("Depósito recebido com sucesso.", CaixaEletonico.depositar(c1, 20.00));
+	}
+
 }
