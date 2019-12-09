@@ -1,31 +1,58 @@
-
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TesteCaixaEletronico {
 
+	MockHardware mockHardware;
+	MockServicoRemoto mockServicoRemoto;
+	private CaixaEletronico caixaEletronico;
+	ContaCorrente contaCorrente;
+
+	@BeforeEach
+	public void iniciaServico() {
+		mockHardware = new MockHardware();
+		mockServicoRemoto = new MockServicoRemoto();
+		contaCorrente = new ContaCorrente(1, 20.00);
+		contaCorrente.setSenha("123456");
+		mockServicoRemoto.setContaCorrente(contaCorrente);
+		caixaEletronico = new CaixaEletronico(mockHardware, mockServicoRemoto);
+	}
+
 	@Test
-	void testeSaldo(){
-		ContaCorrente c1 = new ContaCorrente(1, 10.00);
-		Assertions.assertEquals("O saldo é R$ " + c1.getSaldo(), CaixaEletonico.saldo(c1));
+	void testeSaldo() {
+		assertEquals("O saldo é R$ " + contaCorrente.getSaldo(), caixaEletronico.saldo(contaCorrente));
 	}
 
 	@Test
 	void testeSacarOk() {
-		ContaCorrente c1 = new ContaCorrente(1, 50.00);
-		Assertions.assertEquals("Retire seu dinheiro.", CaixaEletonico.sacar(c1, 20.00));
+		assertEquals("Retire seu dinheiro.", caixaEletronico.sacar(contaCorrente, 10.00));
 	}
 
 	@Test
 	void testeSacarErro() {
-		ContaCorrente c1 = new ContaCorrente(1, 10.00);
-		Assertions.assertEquals("Saldo insuficiente.", CaixaEletonico.sacar(c1, 30.00));
+		assertEquals("Saldo insuficiente.", caixaEletronico.sacar(contaCorrente, 30.00));
 	}
 
 	@Test
 	void testeDepositarOk() {
-		ContaCorrente c1 = new ContaCorrente(1, 5.00);
-		Assertions.assertEquals("Depósito recebido com sucesso.", CaixaEletonico.depositar(c1, 20.00));
+		assertEquals("Depósito recebido com sucesso.", caixaEletronico.depositar(contaCorrente, 100.00));
+	}
+
+	@Test
+	public void testeDepositarErro() {
+		assertEquals("Falha de funcionamento do hardware", caixaEletronico.depositar(contaCorrente, 100.00));
+	}
+
+	@Test
+	public void testeLoginOk() {
+		assertEquals("Usuário Autenticado", caixaEletronico.logar("123456"));
+	}
+
+	@Test
+	public void testeLoginErro() {
+		assertEquals("Não foi possível autenticar o usuário", caixaEletronico.logar("djoipwiev55"));
 	}
 
 }

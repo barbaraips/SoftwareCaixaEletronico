@@ -1,6 +1,7 @@
 public interface ServicoRemoto {
 
-	ContaCorrente persistirConta();
+	ContaCorrente recuperarConta(int id);
 
-	ContaCorrente recuperarConta();
+	void persistirConta(ContaCorrente conta);
+
 }

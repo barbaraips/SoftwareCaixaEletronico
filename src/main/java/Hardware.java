@@ -1,8 +1,8 @@
 public interface Hardware {
 
-	String pegarNumeroDaContaCartao();
+	int pegarNumeroDaContaCartao();
 
-	void entregarDinheiro();
+	void entregarDinheiro(double valor);
 
 	void lerEnvelope();
 
